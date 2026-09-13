@@ -1,3 +1,4 @@
+
 name: Build Single HTML Bundle
 
 on:
@@ -43,8 +44,8 @@ jobs:
           if (fs.existsSync(configFile)) {
             let content = fs.readFileSync(configFile, "utf8");
             if (!content.includes("vite-plugin-singlefile")) {
-              content = `import { singleFile } from "vite-plugin-singlefile";\n` + content;
-              content = content.replace(/plugins:\s*\[/, "plugins: [singleFile(), ");
+              content = `import { viteSingleFile } from "vite-plugin-singlefile";\n` + content;
+              content = content.replace(/plugins:\s*\[/, "plugins: [viteSingleFile(), ");
               fs.writeFileSync(configFile, content);
             }
           }
@@ -63,6 +64,5 @@ jobs:
         with:
           name: single-html-bundle
           path: output/photo-editor-standalone.html
-
 
 

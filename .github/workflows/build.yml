@@ -1,3 +1,4 @@
+
 name: Build Single HTML Bundle
 
 on:
@@ -15,9 +16,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Unzip project source files
+      - name: Find and Unzip source file
         run: |
-          unzip -o project.zip -d .
+          ZIP_FILE=$(find . -maxdepth 1 -name "*.zip" | head -n 1)
+          if [ -z "$ZIP_FILE" ]; then
+            echo "Error: No zip file found in repository!"
+            exit 1
+          fi
+          echo "Unzipping $ZIP_FILE..."
+          unzip -o "$ZIP_FILE" -d .
 
       - name: Set up Node.js
         uses: actions/setup-node@v4

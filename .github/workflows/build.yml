@@ -1,0 +1,43 @@
+name: Build Single HTML Bundle
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Unzip project source files
+        run: |
+          unzip -o project.zip -d .
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Single HTML
+        run: npx vite build
+
+      - name: Prepare Bundle
+        run: |
+          mkdir output
+          cp dist/index.html output/photo-editor-standalone.html
+
+      - name: Upload Single HTML Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: single-html-bundle
+          path: output/photo-editor-standalone.html
